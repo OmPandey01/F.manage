@@ -9,12 +9,12 @@ using namespace std::filesystem;
 
 struct imgdetail{
 
-    std::string name;
-    std::string extension;
-    std::string path;
+    string name;
+    string extension;
+    string path;
 };
 
-void getdetails(const std::string& folderpath,vector<imgdetail>& images){
+void getdetails(const string& folderpath,vector<imgdetail>& images){
 
     for(const auto& entry:directory_iterator(folderpath)){
 
@@ -36,15 +36,35 @@ void getdetails(const std::string& folderpath,vector<imgdetail>& images){
 
 }
 
+
+
+
+void Rename(imgdetail entry,const string& destination){
+    //This funtion takes structure containing file detail
+    //and path of destination where we have to 
+    string source= entry.path;
+
+    string destin=destination+"/"+entry.name;
+
+    rename(source,destin);
+
+
+}
+
+
 int main(){
 
     vector<imgdetail> images;
 
-    getdetails("folder_1",images);
+    getdetails("movedImages",images);
     
     for(const auto& img:images){
 
-        cout<<img.name<<endl;
+        Rename(img,"folder_1");
+        
+
+
+    
     }
 
 //struct to store data
