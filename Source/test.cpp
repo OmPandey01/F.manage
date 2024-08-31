@@ -3,7 +3,7 @@
 #include<string>
 
 using namespace std;
-using namespace string;
+
 
 int main(){
 

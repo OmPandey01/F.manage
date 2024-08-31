@@ -78,18 +78,13 @@ int main(){
     for(const auto& img:images){
         renameImg(img,to_string(count));
 
-        cout<<img.name<<endl;
+        
         
         count++;
 
 
-
-        
-        
-
-
-    
     }
+
 
 //struct to store data
 
