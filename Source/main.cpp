@@ -38,8 +38,25 @@ void getdetails(const string& folderpath,vector<imgdetail>& images){
 
 
 
+void renameImg(imgdetail entry,string name){
+    //This funtion takes structure containing file detail
+    //and path of destination where we have to 
+    string onlyPath= entry.path;
+    string toRemove=entry.name;
+    size_t pos=onlyPath.find(toRemove);
+    if(pos != string::npos){
+        onlyPath.erase(pos,toRemove.length());
+    }
 
-void Rename(imgdetail entry,const string& destination){
+    string destin=onlyPath+name+entry.extension;
+
+    rename(entry.path,destin);
+
+
+}
+
+
+void move(imgdetail entry,const string& destination){
     //This funtion takes structure containing file detail
     //and path of destination where we have to 
     string source= entry.path;
@@ -56,11 +73,18 @@ int main(){
 
     vector<imgdetail> images;
 
-    getdetails("movedImages",images);
-    
+    getdetails("/home/om/Documents/folder_1",images);
+    int count =000;
     for(const auto& img:images){
+        renameImg(img,to_string(count));
 
-        Rename(img,"folder_1");
+        cout<<img.name<<endl;
+        
+        count++;
+
+
+
+        
         
 
 
