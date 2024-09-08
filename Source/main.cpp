@@ -7,24 +7,106 @@ using namespace std;
 using namespace std::filesystem;
 
 
-struct imgdetail{
+struct fileInfo{
 
     string name;
     string extension;
     string path;
 };
 
-void getdetails(const string& folderpath,vector<imgdetail>& images){
 
-    for(const auto& entry:directory_iterator(folderpath)){
+class Operations{
 
-            imgdetail  img;
+public:
 
-            img.name=entry.path().filename().string();
-            img.extension=entry.path().extension().string();
-            img.path=entry.path().string();
+        
+    void getdetails(const string& folderpath,vector<fileInfo>& images){
 
-            images.push_back(img);
+        for(const auto& entry:directory_iterator(folderpath)){
+
+                fileInfo  img;
+
+                img.name=entry.path().filename().string();
+                img.extension=entry.path().extension().string();
+                img.path=entry.path().string();
+
+                images.push_back(img);
+
+        }
+    }
+
+            
+
+
+
+
+   void findDuplicate(string d1,string d2){  
+          
+        vector<fileInfo> f1;
+
+        vector<fileInfo> f2;
+
+
+        int count=0;
+        fileInfo f;
+
+        create_directory("Common_files");
+
+
+        for(const auto& file:directory_iterator(d1)){
+            f.name=file.path().filename().string();
+            f.extension=file.path().extension().string();
+
+            f.path=file.path().string();            
+            f1.push_back(f);
+        }
+
+        for(const auto& file :directory_iterator(d2)){
+
+            f.name=file.path().filename().string();
+
+            f.extension=file.path().extension().string();
+
+            f.path=file.path().string();
+
+            f2.push_back(f);
+
+        }
+            vector<string> name;
+
+        for(const fileInfo& ft1:f1){
+            for(const fileInfo& ft2:f2)
+            {
+                if(ft1.name ==ft2.name && ft1.extension==ft2.extension){
+                    name.push_back(ft1.name);
+
+                    count++;
+                    move(ft1,"Common_files");
+                    remove(ft2.path);
+
+                }
+    
+
+
+            }
+
+        }
+
+
+            cout<<"These "<<count<<"Files were common and have been moved to"<<endl;
+                count=1;
+            for(string& n:name){
+                
+
+                cout<<count<<". "<<n<<endl;
+                
+                 count++;
+
+
+            }  
+
+
+
 
 
 
@@ -32,61 +114,60 @@ void getdetails(const string& folderpath,vector<imgdetail>& images){
     }
 
 
+    void renameImg(fileInfo entry,string name){
+        //This funtion takes structure containing file detail
+        //and new name of file we want to give 
+        string onlyPath= entry.path;
+        string toRemove=entry.name;
+        size_t pos=onlyPath.find(toRemove);
+        if(pos != string::npos){
+            onlyPath.erase(pos,toRemove.length());
+        }
+
+        string destin=onlyPath+name+entry.extension;
+
+        rename(entry.path,destin);
 
 
-}
-
-
-
-void renameImg(imgdetail entry,string name){
-    //This funtion takes structure containing file detail
-    //and path of destination where we have to 
-    string onlyPath= entry.path;
-    string toRemove=entry.name;
-    size_t pos=onlyPath.find(toRemove);
-    if(pos != string::npos){
-        onlyPath.erase(pos,toRemove.length());
     }
 
-    string destin=onlyPath+name+entry.extension;
 
-    rename(entry.path,destin);
+    void move(fileInfo entry,const string& destination){
+        //This funtion takes structure containing file detail
+        //and path of destination where we have to  move those files
 
+        string targetPath=destination+"/"+entry.name;
 
-}
-
-
-void move(imgdetail entry,const string& destination){
-    //This funtion takes structure containing file detail
-    //and path of destination where we have to 
-    string source= entry.path;
-
-    string destin=destination+"/"+entry.name;
-
-    rename(source,destin);
+        rename(entry.path,targetPath);
 
 
-}
+    }
+
+};
+
+// void lb(void){
+
+//     cout<<"\033[32m ===================================================================================================================\033[0m"<<endl;
+
+// }
+
+// void sb(void){
+
+//     cout<<endl<<endl;
+
+// }
+
 
 
 int main(){
 
-    vector<imgdetail> images;
+    
 
-    getdetails("/home/om/Documents/folder_1",images);
-    int count =000;
-    for(const auto& img:images){
-        renameImg(img,to_string(count));
+    Operations op;
 
-        
-        
-        count++;
+    op.findDuplicate("folder_1","folder_2");
 
 
-    }
-
-
-//struct to store data
 
 
 
